@@ -34,6 +34,7 @@ except Exception as e:
 # --- 2. Data Extraction Prompt and Schema (UPDATED FOR PASSPORT) ---
 
 # Define the expected output structure for a Myanmar Passport
+# This schema dictates the EXACT JSON structure the AI must return.
 extraction_schema = {
     "type": "object",
     "properties": {
@@ -84,7 +85,7 @@ If a field is not found, return an empty string "" for that value.
 Do not include any extra text or formatting outside of the JSON object.
 """
 
-# --- 3. File Handling Function (Only PIL remains - identical) ---
+# --- 3. File Handling Function ---
 
 def handle_file_to_pil(uploaded_file):
     """Converts uploaded file or bytes to a PIL Image object."""
@@ -100,11 +101,11 @@ def handle_file_to_pil(uploaded_file):
         st.error(f"Error converting file to image: {e}")
         return None
         
-# --- 4. AI Extraction Logic (Identical structure, but using passport schema/prompt) ---
+# --- 4. AI Extraction Logic ---
 
 def run_structured_extraction(image_pil):
     """
-    Uses the AI API to analyze the image and extract structured data.
+    Uses the AI API to analyze the image and extract structured data using the defined schema.
     """
     try:
         response = client.models.generate_content(
@@ -113,7 +114,7 @@ def run_structured_extraction(image_pil):
             config=types.GenerateContentConfig(
                 response_mime_type="application/json",
                 response_schema=extraction_schema,
-                temperature=0.0, # Use low temperature for deterministic data extraction
+                temperature=0.0, # Low temperature ensures deterministic, accurate data extraction
             )
         )
         
@@ -128,7 +129,7 @@ def run_structured_extraction(image_pil):
         st.error(f"An unexpected error occurred during AI processing: {e}")
         return None
 
-# --- 5. Helper Functions (Updated for Passport fields) ---
+# --- 5. Helper Functions ---
 
 def create_downloadable_files(extracted_dict):
     """Formats the extracted data into CSV, TXT, and DOC formats."""
@@ -168,7 +169,7 @@ def create_downloadable_files(extracted_dict):
     return txt_content, csv_content, doc_content, results_dict
 
 
-# --- 6. UI and Execution Flow (Updated for Passport Fields) ---
+# --- 6. UI and Execution Flow ---
 
 def process_image_and_display(original_image_pil, unique_key_suffix):
     """
@@ -200,7 +201,7 @@ def process_image_and_display(original_image_pil, unique_key_suffix):
     with col2:
         st.header("Extraction Results")
         
-        # --- Results Form (UPDATED FOR PASSPORT FIELDS) ---
+        # --- Results Form (Display Extracted Fields) ---
         form_key = f"results_form_{unique_key_suffix}"
         with st.form(form_key): 
             # Primary Fields

@@ -291,7 +291,6 @@ def process_image_and_display(original_image_pil, unique_key_suffix):
 # --- Main App Body (No change) ---
 
 st.title("🛂 Myanmar Passport Extractor (AI OCR) with Validation")
-st.caption("Structured data extraction and **Checksum Verification** using Gemini.")
 
 # --- Tab Setup ---
 tab1, tab2 = st.tabs(["📷 Live Capture (Scanner)", "⬆️ Upload File"])
